@@ -9,12 +9,10 @@ def get_meta():
     conn = psycopg2.connect(database_url)
     
     with conn.cursor() as curr:
-        
-        response = curr.execute(
-            "SELECT * FROM files"
-        )
-        
-        print(response)
+        # Execute SELECT query to fetch all records
+        curr.execute("SELECT * FROM files")
+        response = curr.fetchall()  # Fetch all results from the SELECT query
+        print(response)  # This will print the list of records retrieved
         
     conn.commit()
     conn.close()
