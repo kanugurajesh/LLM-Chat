@@ -1,8 +1,8 @@
-# main.py
 from fastapi import FastAPI
-from upload import router as upload_router
-from chat import router as chat_router
+from routes.upload import router as upload_router
+from routes.chat import router as chat_router
 
+# Initialize the FastAPI app
 app = FastAPI()
 
 # Include the routers
