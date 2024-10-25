@@ -3,6 +3,7 @@ import shutil
 import os
 from dotenv import load_dotenv
 from utils.storemeta import store_meta
+from utils.storedata import store_data
 
 # loading all the environment variables
 load_dotenv()
@@ -25,5 +26,7 @@ async def upload(file: UploadFile = File(...), user_gmail: str = ""):
     
     # The below function call is used to store the metadata of the uploaded file in the database
     store_meta(file_location, file.filename, file.file._file.tell(), file.content_type, user_gmail)
+    
+    store_data()
 
     return {"message": "File uploaded successfully", "file_location": file_location}
