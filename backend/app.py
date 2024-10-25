@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from langchain_cohere import CohereEmbeddings
 
 load_dotenv()
+
 app = FastAPI()
 
 # Create a directory for uploads if it doesn't exist
@@ -15,6 +16,7 @@ os.makedirs(UPLOAD_DIRECTORY, exist_ok=True)
 # environment variables
 database_url = os.getenv('DATABASE_URL')
 conn = psycopg2.connect(database_url)
+
 # Define the number of similar results to retrieve
 top_n = 5
 

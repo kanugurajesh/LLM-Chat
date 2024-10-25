@@ -1,22 +1,20 @@
-# item_routes.py
-from fastapi import APIRouter
-from fastapi import FastAPI, File, UploadFile
+# upload.py
+from fastapi import APIRouter, File, UploadFile
 import shutil
 import os
 from dotenv import load_dotenv
-from langchain_cohere import CohereEmbeddings
 
 load_dotenv()
 
 router = APIRouter()
 
-# Create a directory for uploads if it doesn't exist
+# Directory for uploads
 UPLOAD_DIRECTORY = "uploads"
 os.makedirs(UPLOAD_DIRECTORY, exist_ok=True)
 
-@router.get("/")
+@router.post("")
 async def upload(file: UploadFile = File(...)):
-    # Save the uploaded file
+    # Define the path to save the uploaded file
     file_location = os.path.join(UPLOAD_DIRECTORY, file.filename)
     
     with open(file_location, "wb") as buffer:
