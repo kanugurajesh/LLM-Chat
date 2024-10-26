@@ -8,7 +8,6 @@ embedding_model = CohereEmbeddings(model="embed-english-v3.0")
 database_url = os.getenv("DATABASE_URL")
 conn = psycopg2.connect(database_url)
 
-
 def store_data(file_path):
     loader = PyMuPDFLoader(file_path)
 

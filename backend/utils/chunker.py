@@ -6,6 +6,7 @@ def chunker(data):
     """This function splits the text into chunks of 500 characters each with an overlap of 50 characters,
     removes newline characters from each chunk, and generates embeddings for each chunk using Cohere."""
     
+    # The below is used to generate embeddings for each chunk of text
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=500,
         chunk_overlap=50
