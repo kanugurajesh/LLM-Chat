@@ -1,5 +1,6 @@
 import { useState } from "react";
-import Chat from "./Chat";
+// import Chat from "./Chat";
+import Chat from "./components/Chat";
 
 function App() {
   const [file, setFile] = useState<File | null>(null);
@@ -41,7 +42,7 @@ function App() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} method="post">
+      {/* <form onSubmit={handleSubmit} method="post">
         <input
           type="file"
           accept="application/pdf" // Specify the accepted file type
@@ -51,7 +52,7 @@ function App() {
           {uploading ? "Uploading..." : "Submit"}
         </button>
       </form>
-      {message && <p>{message}</p>}
+      {message && <p>{message}</p>} */}
       <Chat />
     </div>
   );
