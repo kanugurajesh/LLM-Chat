@@ -1,5 +1,4 @@
 from fastapi import APIRouter, File, UploadFile
-import shutil
 import os
 from dotenv import load_dotenv
 # loading all the environment variables
@@ -11,7 +10,8 @@ router = APIRouter()
 UPLOAD_DIRECTORY = "uploads"
 os.makedirs(UPLOAD_DIRECTORY, exist_ok=True)
 
-# The default route for the upload endpoint
 @router.get("")
-async def files():
-    return "files"
+async def list_files():
+    # List the files in the uploads directory
+    files = os.listdir(UPLOAD_DIRECTORY)
+    return {"files": files}
