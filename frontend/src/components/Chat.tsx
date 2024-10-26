@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { File, CirclePlus, SendHorizontal } from "lucide-react";
+import { motion } from "framer-motion";
+import { leftToRight } from "../lib/utils";
 
 type Message = {
   id: number;
@@ -100,9 +102,22 @@ export default function Component() {
           className="hidden"
         />
       </nav>
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 overflow-x-hidden">
         {messages.map((message) => (
-          <div
+          <motion.div
+            initial={
+              message.sender === "bot"
+                ? { opacity: 0, scale: 0.9, x: "-25%" }
+                : { opacity: 0, scale: 0.9, x: "25%" }
+            }
+            animate={
+              message.sender === "bot"
+                ? { opacity: 1, scale: 1, x: "0%" }
+                : { opacity: 1, scale: 1, x: "0%" }
+            }
+            transition={{ duration: 0.5 }}
+            whileHover={{ scale: 1.05 }}
+            WhileTap={{ scale: 0.95 }}
             key={message.id}
             className={`max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl p-3 rounded-lg ${
               message.sender === "user"
@@ -111,7 +126,7 @@ export default function Component() {
             }`}
           >
             {message.text}
-          </div>
+          </motion.div>
         ))}
         <div ref={messagesEndRef} />
       </div>
