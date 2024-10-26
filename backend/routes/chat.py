@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from langchain_cohere import CohereEmbeddings
 import psycopg2
 import os
@@ -12,13 +12,19 @@ database_url = os.getenv("DATABASE_URL")
 router = APIRouter()
 
 # Define the number of similar results to retrieve
-top_n = 2
+top_n = 4
 
 @router.post("")
-async def read_items(query: str = ""):
+async def read_items(request: Request):
+    # Parse incoming JSON data
+    data = await request.json()
+    message = data.get("message", "")
+
+    print("message:", message)
+
     # Initialize embeddings
     embeddings = CohereEmbeddings(model="embed-english-v3.0")
-    query_embedding = embeddings.embed_query(query)
+    query_embedding = embeddings.embed_query(message)
 
     # Connect to the database
     with psycopg2.connect(database_url) as conn:
@@ -36,4 +42,4 @@ async def read_items(query: str = ""):
 
             # Fetch and return the results
             results = cur.fetchall()
-            return [{"text": result[0], "similarity": result[2]} for result in results]
+            return [{"text": result[0]} for result in results]
