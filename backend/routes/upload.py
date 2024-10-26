@@ -27,6 +27,8 @@ async def upload(file: UploadFile = File(...), user_gmail: str = ""):
     # The below function call is used to store the metadata of the uploaded file in the database
     store_meta(file_location, file.filename, file.file._file.tell(), file.content_type, user_gmail)
     
-    store_data()
+    print(file_location)
+    
+    store_data(file_location)
 
     return {"message": "File uploaded successfully", "file_location": file_location}
