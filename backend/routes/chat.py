@@ -78,6 +78,4 @@ async def read_items(request: Request):
         config={"configurable": {"thread_id": "1"}},
     )
 
-    print(final.get("messages"))
-
-    return final
+    return final.get("messages")[1].content
