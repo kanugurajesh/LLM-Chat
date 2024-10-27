@@ -20,8 +20,10 @@ router = APIRouter()
 # Define the number of similar results to retrieve
 top_n = 5
 
+# Initialiazing the cohere model
 model = ChatCohere(temperature=0)
 
+# Creating a prompt template for the model
 prompt = PromptTemplate.from_template(
     "As a knowledgeable assistant, provide a clear and helpful answer to the user's question."
     "Question: {question}"
@@ -53,8 +55,6 @@ async def read_items(request: Request):
     # Parse incoming JSON data
     data = await request.json()
     message = data.get("message", "")
-
-    print("message:", message)
 
     # Initialize embeddings
     embeddings = CohereEmbeddings(model="embed-english-v3.0")
