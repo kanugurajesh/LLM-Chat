@@ -2,9 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { File, CirclePlus, SendHorizontal } from "lucide-react";
+import { File, CirclePlus, SendHorizontal, Plus } from "lucide-react";
 import { motion } from "framer-motion";
-import { leftToRight } from "../lib/utils";
 
 type Message = {
   id: number;
@@ -28,7 +27,7 @@ export default function Component() {
 
   useEffect(scrollToBottom, [messages]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (inputMessage.trim() === "") return;
 
@@ -37,6 +36,19 @@ export default function Component() {
       text: inputMessage,
       sender: "user",
     };
+
+    const response = await fetch("http://localhost:8000/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: inputMessage }),
+    });
+
+    if (!response.ok) {
+      toast.error("Failed to send message. Please try again.");
+      return;
+    }
 
     setMessages((prevMessages) => [...prevMessages, newUserMessage]);
     setInputMessage("");
@@ -55,6 +67,10 @@ export default function Component() {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     toast.loading("Uploading PDF file...");
     setFile(e.target.files?.[0] || null);
+
+    // Adding the below one to handle the delay in setFile
+    const file = e.target.files?.[0];
+
     if (file && file.type === "application/pdf") {
       // Here you would typically send the file to your server or process it
       // For this example, we'll just add a message about the upload
@@ -77,13 +93,23 @@ export default function Component() {
       <Toaster position="bottom-right" />
       <nav className="flex justify-between items-center p-4 bg-white shadow-md">
         <div className="flex items-center">
-          <img src="/logo.png" alt="logo" width={104} height={41} />
+          <a href="/">
+            <img
+              src="/logo.png"
+              alt="logo"
+              width={104}
+              height={41}
+              className="cursor-pointer"
+            />
+          </a>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-4 items-center">
           {file && (
             <div className="flex items-center gap-2">
-              <File />
-              <p>{file?.name}</p>
+              <div className="border-2 border-[#0FA95870] p-2 rounded-md">
+                <File color="#0FA958" />
+              </div>
+              <p className="text-[#0FA958] font-semibold">{file?.name}</p>
             </div>
           )}
           <button
@@ -119,7 +145,7 @@ export default function Component() {
             whileHover={{ scale: 1.05 }}
             WhileTap={{ scale: 0.95 }}
             key={message.id}
-            className={`max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl p-3 rounded-lg ${
+            className={` w-fit max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl p-3 rounded-lg ${
               message.sender === "user"
                 ? "bg-blue-500 text-white ml-auto"
                 : "bg-white text-gray-800"
@@ -132,6 +158,12 @@ export default function Component() {
       </div>
       <form onSubmit={handleSendMessage} className="p-4 bg-white border-t">
         <div className="flex space-x-2">
+          <button
+            type="submit"
+            className="p-2 bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-full"
+          >
+            <Plus />
+          </button>
           <input
             type="text"
             value={inputMessage}
