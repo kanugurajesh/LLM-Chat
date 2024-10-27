@@ -44,5 +44,3 @@ def store_data(file_path):
             # Commit and close the connection
             conn.commit()
             print("Embeddings stored in PostgreSQL with pgvector successfully.")
-
-    conn.close()

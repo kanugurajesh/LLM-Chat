@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* style the webscroll bar */
-
 /* width */
 ::-webkit-scrollbar {
   width: 14px;

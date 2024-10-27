@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { File, CirclePlus, SendHorizontal, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 
+// Defining the Message type
 type Message = {
   id: number;
   text: string;
@@ -21,12 +22,15 @@ export default function Component() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
 
+  // The below functions is used to scroll to the bottom of the chat window
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // whenever the messages are updated it will scroll to the bottom
   useEffect(scrollToBottom, [messages]);
 
+  // Function to handle the user message and bot response
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (inputMessage.trim() === "") return;
@@ -73,7 +77,8 @@ export default function Component() {
     }
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Function to handle the file upload
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     toast.loading("Uploading PDF file...");
     setFile(e.target.files?.[0] || null);
 
@@ -81,6 +86,23 @@ export default function Component() {
     const file = e.target.files?.[0];
 
     if (file && file.type === "application/pdf") {
+      // upload the file to the server
+
+      const formData = new FormData();
+
+      formData.append("file", file);
+
+      const response = await fetch("http://localhost:8000/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        toast.dismiss();
+        toast.error("Error occurred while uploading the file.");
+        return;
+      }
+
       // Here you would typically send the file to your server or process it
       // For this example, we'll just add a message about the upload
       toast.dismiss();
