@@ -62,6 +62,25 @@ async def read_items(request: Request):
     with psycopg2.connect(database_url) as conn:
         with conn.cursor() as cur:
             query_embedding = embeddings.embed_query(message)
+
+            # Check if the query embedding is empty
+            if not query_embedding:
+                return "Sorry, I didn't understand that. Could you please rephrase your question?"
+
+            # check if the embeddings table exists
+            cur.execute(
+                """
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM information_schema.tables
+                    WHERE table_name = 'embeddings'
+                );
+                """
+            )
+
+            if not cur.fetchone()[0]:
+                return "Sorry, I am unable to answer your question at the moment. Please try again later."
+
             # Perform semantic search
             cur.execute(
                 """
@@ -92,9 +111,5 @@ async def read_items(request: Request):
         },
         config={"configurable": {"thread_id": "1"}},
     )
-
-    query_embedding = ""
-
-    print(len(final.get("messages")))
 
     return final.get("messages")[len(final.get("messages")) - 1].content
