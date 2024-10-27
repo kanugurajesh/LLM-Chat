@@ -18,17 +18,17 @@ database_url = os.getenv("DATABASE_URL")
 router = APIRouter()
 
 # Define the number of similar results to retrieve
-top_n = 4
+top_n = 5
 
 model = ChatCohere(temperature=0)
 
 prompt = PromptTemplate.from_template(
-    "As a knowledgeable assistant, provide a clear and helpful answer to the user's question.\n"
-    "Question: {question}\n"
-    "Context (if relevant): {context}\n"
-    "Utilize the context provided to enrich your answer if it is relevant. If the context is not applicable, base your response on general knowledge. If I ask for the question, formulate it based on our previous conversations.\n"
+    "As a knowledgeable assistant, provide a clear and helpful answer to the user's question."
+    "Question: {question}"
+    "Context : {context}"
     "Respond concisely and directly:"
 )
+
 
 def call_model(state: MessagesState):
     system_prompt = (
@@ -58,13 +58,10 @@ async def read_items(request: Request):
 
     # Initialize embeddings
     embeddings = CohereEmbeddings(model="embed-english-v3.0")
-    query_embedding = embeddings.embed_query(message)
-
-    data = ""
-
     # Connect to the database
     with psycopg2.connect(database_url) as conn:
         with conn.cursor() as cur:
+            query_embedding = embeddings.embed_query(message)
             # Perform semantic search
             cur.execute(
                 """
@@ -79,14 +76,16 @@ async def read_items(request: Request):
             # Fetch and return the results
             results = cur.fetchall()
 
-            data = [{"text": result[0]} for result in results]
+            context_data = [{"text": result[0]} for result in results]
+
+    context = context_data[0]["text"] if context_data else ""
 
     final = app.invoke(
         {
             "messages": [
                 HumanMessage(
                     content=prompt.invoke(
-                        {"question": message, "context": data}
+                        {"question": message, "context": context}
                     ).to_string()
                 )
             ]
@@ -94,4 +93,8 @@ async def read_items(request: Request):
         config={"configurable": {"thread_id": "1"}},
     )
 
-    return final.get("messages")[1].content
+    query_embedding = ""
+
+    print(len(final.get("messages")))
+
+    return final.get("messages")[len(final.get("messages")) - 1].content
