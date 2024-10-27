@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   FileText,
   MessageSquare,
@@ -62,7 +62,7 @@ export default function HomePage() {
               Unlock the power of your documents with AI-driven conversations
             </p>
             <a
-              href="#"
+              href="/chat"
               className="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-100 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
               Get Started for Free
@@ -105,7 +105,7 @@ export default function HomePage() {
               document experience. Start for free today!
             </p>
             <a
-              href="#"
+              href="/chat"
               className="bg-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-700 transition duration-300 inline-flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
               Start Now

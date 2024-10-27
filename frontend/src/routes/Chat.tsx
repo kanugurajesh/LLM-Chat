@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { File, Upload, Send, Plus, Menu, User, Bot } from "lucide-react";
 import { Link } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 type Message = {
   id: number;
@@ -99,6 +100,7 @@ export default function Component() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
+      <Toaster />
       <nav className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 shadow-md">
         <div className="flex items-center space-x-4">
           <a href="/" className="flex-shrink-0">
