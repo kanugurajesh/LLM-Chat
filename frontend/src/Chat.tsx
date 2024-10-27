@@ -4,13 +4,13 @@ const Chat = () => {
   const [message, setMessage] = useState<string>("");
   const [response, setResponse] = useState<string>("");
 
-  const concatData = (data: any) => {
-    let result = "";
-    data.forEach((element: any) => {
-      result += element.text + " ";
-    });
-    return result;
-  };
+  // const concatData = (data: any) => {
+  //   let result = "";
+  //   data.forEach((element: any) => {
+  //     result += element.text + " ";
+  //   });
+  //   return result;
+  // };
 
   const messageSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,11 +23,12 @@ const Chat = () => {
         body: JSON.stringify({ message: message }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
-        setResponse(concatData(data));
+        setResponse(data.text);
       } else {
-        console.error("Failed to fetch response");
+        setResponse("Error: " + data.message);
       }
     } catch (error) {
       console.error("Error:", error);

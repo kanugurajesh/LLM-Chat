@@ -31,11 +31,17 @@ export default function Component() {
     e.preventDefault();
     if (inputMessage.trim() === "") return;
 
+    toast.dismiss();
+    toast.loading("Thinking...");
+
     const newUserMessage: Message = {
       id: messages.length + 1,
       text: inputMessage,
       sender: "user",
     };
+
+    setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+    setInputMessage("");
 
     const response = await fetch("http://localhost:8000/chat", {
       method: "POST",
@@ -45,23 +51,26 @@ export default function Component() {
       body: JSON.stringify({ message: inputMessage }),
     });
 
-    if (!response.ok) {
-      toast.error("Failed to send message. Please try again.");
-      return;
-    }
+    const data = await response.json();
 
-    setMessages((prevMessages) => [...prevMessages, newUserMessage]);
-    setInputMessage("");
-
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse: Message = {
+    if (response.ok) {
+      toast.dismiss();
+      const newBotMessage: Message = {
         id: messages.length + 2,
-        text: "Thanks for your message. I'm a simple bot, so I don't have real responses yet.",
+        text: data,
         sender: "bot",
       };
-      setMessages((prevMessages) => [...prevMessages, botResponse]);
-    }, 1000);
+      setMessages((prevMessages) => [...prevMessages, newBotMessage]);
+    } else {
+      toast.dismiss();
+      toast.error("Error occurred. Please try again.");
+      const newBotMessage: Message = {
+        id: messages.length + 2,
+        text: "Error: " + data.message,
+        sender: "bot",
+      };
+      setMessages((prevMessages) => [...prevMessages, newBotMessage]);
+    }
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +99,7 @@ export default function Component() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-      <Toaster position="bottom-right" />
+      <Toaster />
       <nav className="flex justify-between items-center p-4 bg-white shadow-md">
         <div className="flex items-center">
           <a href="/">
