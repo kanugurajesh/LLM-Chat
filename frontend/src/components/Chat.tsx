@@ -133,8 +133,14 @@ export default function Component() {
               className="cursor-pointer"
             />
           </a>
-          <a href="/upload" className="font-semibold">Upload</a>
-          <a href="/delete" className="font-semibold">Delete</a>
+          <div className="group font-semibold relative pb-1">
+            <a href="/upload">Upload</a>
+            <span className="h-1 w-0 bg-black group-hover:w-full transition-all ease-in-out duration-300 absolute top-6 left-0"></span>
+          </div>
+          <div className="group font-semibold relative pb-1">
+            <a href="/about">About</a>
+            <span className="h-1 w-0 bg-black group-hover:w-full transition-all ease-in-out duration-300 absolute top-6 left-0"></span>
+          </div>
         </div>
         <div className="flex gap-4 items-center">
           {file && (

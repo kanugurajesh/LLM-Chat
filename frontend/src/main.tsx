@@ -1,8 +1,10 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import About from "./routes/About.tsx";
+import NotFound from "./routes/NotFound.tsx";
+import Upload from "./routes/Upload.tsx";
 
 const router = createBrowserRouter([
   {
@@ -11,7 +13,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/about",
-    element: <div>About</div>,
+    element: <About />,
+  },
+  {
+    path: "/upload",
+    element: <Upload />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
