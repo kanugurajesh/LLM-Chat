@@ -64,7 +64,8 @@ export default function Component() {
         throw new Error(data.message);
       }
     } catch (error) {
-      alert("Failed to send message. Please try again.");
+      toast.dismiss();
+      toast.error("Failed to send message. Please try again.");
     } finally {
       setIsLoading(false);
     }
