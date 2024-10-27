@@ -134,12 +134,16 @@ export default function Component() {
             />
           </a>
           <div className="group font-semibold relative pb-1">
+            <a href="/chat">Chat</a>
+            <span className="h-1 w-0 bg-[#0FA958] group-hover:w-full transition-all ease-in-out duration-300 absolute top-6 left-0"></span>
+          </div>
+          <div className="group font-semibold relative pb-1">
             <a href="/upload">Upload</a>
-            <span className="h-1 w-0 bg-black group-hover:w-full transition-all ease-in-out duration-300 absolute top-6 left-0"></span>
+            <span className="h-1 w-0 bg-[#0FA958] group-hover:w-full transition-all ease-in-out duration-300 absolute top-6 left-0"></span>
           </div>
           <div className="group font-semibold relative pb-1">
             <a href="/about">About</a>
-            <span className="h-1 w-0 bg-black group-hover:w-full transition-all ease-in-out duration-300 absolute top-6 left-0"></span>
+            <span className="h-1 w-0 bg-[#0FA958] group-hover:w-full transition-all ease-in-out duration-300 absolute top-6 left-0"></span>
           </div>
         </div>
         <div className="flex gap-4 items-center">
