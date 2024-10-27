@@ -1,10 +1,13 @@
 from fastapi import APIRouter, Request
-from langchain_cohere import CohereEmbeddings
-from langchain.memory import ConversationBufferMemory
+from langchain_cohere import CohereEmbeddings, ChatCohere
 import psycopg2
 import os
 from dotenv import load_dotenv
-from langchain.chains import llm
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import START, MessagesState, StateGraph
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+
+workflow = StateGraph(state_schema=MessagesState)
 
 # Load environment variables
 load_dotenv()
@@ -16,7 +19,25 @@ router = APIRouter()
 # Define the number of similar results to retrieve
 top_n = 4
 
-memory = ConversationBufferMemory(return_messages=True)
+model = ChatCohere(temperature=0)
+
+
+def call_model(state: MessagesState):
+    system_prompt = (
+        "You are a helpful assistant. "
+        "Answer all questio ns to the best of your ability. "
+    )
+    messages = [SystemMessage(content=system_prompt)] + state["messages"]
+    response = model.invoke(messages)
+    return {"messages": response}
+
+
+workflow.add_node("model", call_model)
+workflow.add_edge(START, "model")
+
+# Add simple in-memory checkpointer
+memory = MemorySaver()
+app = workflow.compile(checkpointer=memory)
 
 
 @router.post("")
@@ -52,14 +73,11 @@ async def read_items(request: Request):
 
             data = [{"text": result[0]} for result in results]
 
-    memory.save_context({"input": message}, {"output": data})
+    final = app.invoke(
+        {"messages": [HumanMessage(content=message)]},
+        config={"configurable": {"thread_id": "1"}},
+    )
 
+    print(final.get("messages"))
 
-@router.get("/delete")
-async def delete_items():
-    memory.clear()
-
-
-@router.get("/context")
-async def get_context():
-    return memory.load_memory_variables({})
+    return final
