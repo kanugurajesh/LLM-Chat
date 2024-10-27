@@ -35,7 +35,7 @@ prompt = PromptTemplate.from_template(
 def call_model(state: MessagesState):
     system_prompt = (
         "You are a helpful assistant. "
-        "Answer all questio ns to the best of your ability. "
+        "Answer all questions to the best of your ability. "
     )
     messages = [SystemMessage(content=system_prompt)] + state["messages"]
     response = model.invoke(messages)

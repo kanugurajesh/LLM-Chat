@@ -7,6 +7,8 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import NavItem from "./components/NavItem";
+import FeatureCard from "./components/FeatureCard";
 
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -217,35 +219,6 @@ export default function HomePage() {
           </p>
         </div>
       </footer>
-    </div>
-  );
-}
-
-function NavItem({ href, text }: { href: string; text: string }) {
-  return (
-    <li>
-      <a
-        href={href}
-        className="text-white hover:text-purple-200 transition duration-300"
-      >
-        {text}
-      </a>
-    </li>
-  );
-}
-
-interface FeatureCardProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}
-
-function FeatureCard({ icon, title, description }: FeatureCardProps) {
-  return (
-    <div className="bg-white p-8 rounded-xl shadow-lg text-center transform transition duration-500 hover:scale-105">
-      <div className="flex justify-center mb-6">{icon}</div>
-      <h4 className="text-2xl font-semibold mb-4">{title}</h4>
-      <p className="text-gray-600">{description}</p>
     </div>
   );
 }
