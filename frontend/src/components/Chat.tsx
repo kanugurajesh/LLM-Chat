@@ -123,7 +123,7 @@ export default function Component() {
     <div className="flex flex-col h-screen bg-gray-100">
       <Toaster />
       <nav className="flex justify-between items-center p-4 bg-white shadow-md">
-        <div className="flex items-center">
+        <div className="flex items-center space-x-14">
           <a href="/">
             <img
               src="/logo.png"
@@ -133,6 +133,8 @@ export default function Component() {
               className="cursor-pointer"
             />
           </a>
+          <a href="/upload" className="font-semibold">Upload</a>
+          <a href="/delete" className="font-semibold">Delete</a>
         </div>
         <div className="flex gap-4 items-center">
           {file && (
