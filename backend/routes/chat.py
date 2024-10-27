@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import START, MessagesState, StateGraph
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.prompts import PromptTemplate
 
 workflow = StateGraph(state_schema=MessagesState)
 
@@ -21,6 +22,13 @@ top_n = 4
 
 model = ChatCohere(temperature=0)
 
+prompt = PromptTemplate.from_template(
+    "As a knowledgeable assistant, provide a clear and helpful answer to the user's question.\n"
+    "Question: {question}\n"
+    "Context (if relevant): {context}\n"
+    "Utilize the context provided to enrich your answer if it is relevant. If the context is not applicable, base your response on general knowledge. If I ask for the question, formulate it based on our previous conversations.\n"
+    "Respond concisely and directly:"
+)
 
 def call_model(state: MessagesState):
     system_prompt = (
@@ -74,7 +82,15 @@ async def read_items(request: Request):
             data = [{"text": result[0]} for result in results]
 
     final = app.invoke(
-        {"messages": [HumanMessage(content=message)]},
+        {
+            "messages": [
+                HumanMessage(
+                    content=prompt.invoke(
+                        {"question": message, "context": data}
+                    ).to_string()
+                )
+            ]
+        },
         config={"configurable": {"thread_id": "1"}},
     )
 
