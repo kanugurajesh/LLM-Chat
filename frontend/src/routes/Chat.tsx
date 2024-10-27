@@ -29,6 +29,7 @@ export default function Component() {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    toast.loading("Thinking...");
     if (inputMessage.trim() === "" || isLoading) return;
 
     const newUserMessage: Message = {
@@ -50,6 +51,7 @@ export default function Component() {
 
       const data = await response.json();
 
+      toast.dismiss();
       if (response.ok) {
         const newBotMessage: Message = {
           id: messages.length + 2,
@@ -58,6 +60,7 @@ export default function Component() {
         };
         setMessages((prevMessages) => [...prevMessages, newBotMessage]);
       } else {
+        toast.error("Failed to send message. Please try again.");
         throw new Error(data.message);
       }
     } catch (error) {
@@ -70,6 +73,7 @@ export default function Component() {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type === "application/pdf") {
+      toast.loading("Uploading...");
       setFile(file);
       const formData = new FormData();
       formData.append("file", file);
@@ -80,6 +84,7 @@ export default function Component() {
           body: formData,
         });
 
+        toast.dismiss();
         if (!response.ok) throw new Error("Upload failed");
 
         const newBotMessage: Message = {
@@ -89,12 +94,12 @@ export default function Component() {
         };
         setMessages((prevMessages) => [...prevMessages, newBotMessage]);
 
-        alert("PDF file uploaded successfully!");
+        toast.success("PDF uploaded successfully!");
       } catch (error) {
-        alert("Failed to upload PDF. Please try again.");
+        toast.error("Failed to upload PDF. Please try again.");
       }
     } else {
-      alert("Please upload a valid PDF file.");
+      toast.error("Please upload a valid PDF file.");
     }
   };
 
