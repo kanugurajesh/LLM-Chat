@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { File, Upload, Send, Plus, Menu, User, Bot } from "lucide-react";
+import { Link } from "react-router-dom";
 
 type Message = {
   id: number;
@@ -110,14 +111,19 @@ export default function Component() {
             />
           </a>
           <div className="hidden md:flex space-x-4">
-            {["Chat", "Upload", "About"].map((item) => (
-              <button
-                key={item}
+            {[
+              { name: "Chat", path: "/chat" },
+              { name: "Upload", path: "/upload" },
+              { name: "About", path: "/about" },
+            ].map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
                 className="relative group px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
               >
-                {item}
+                {item.name}
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
-              </button>
+              </Link>
             ))}
           </div>
         </div>
