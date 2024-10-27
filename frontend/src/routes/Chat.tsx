@@ -1,11 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { File, CirclePlus, SendHorizontal, Plus } from "lucide-react";
-import { motion } from "framer-motion";
+import { File, Upload, Send, Plus, Menu, User, Bot } from "lucide-react";
 
-// Defining the Message type
 type Message = {
   id: number;
   text: string;
@@ -16,27 +13,21 @@ export default function Component() {
   const [messages, setMessages] = useState<Message[]>([
     { id: 1, text: "Hello! How can I help you today?", sender: "bot" },
   ]);
-
   const [inputMessage, setInputMessage] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File | null>(null);
 
-  // The below functions is used to scroll to the bottom of the chat window
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // whenever the messages are updated it will scroll to the bottom
   useEffect(scrollToBottom, [messages]);
 
-  // Function to handle the user message and bot response
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputMessage.trim() === "") return;
-
-    toast.dismiss();
-    toast.loading("Thinking...");
+    if (inputMessage.trim() === "" || isLoading) return;
 
     const newUserMessage: Message = {
       id: messages.length + 1,
@@ -46,121 +37,113 @@ export default function Component() {
 
     setMessages((prevMessages) => [...prevMessages, newUserMessage]);
     setInputMessage("");
+    setIsLoading(true);
 
-    const response = await fetch("http://localhost:8000/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message: inputMessage }),
-    });
+    try {
+      const response = await fetch("http://localhost:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: inputMessage }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      toast.dismiss();
-      const newBotMessage: Message = {
-        id: messages.length + 2,
-        text: data,
-        sender: "bot",
-      };
-      setMessages((prevMessages) => [...prevMessages, newBotMessage]);
-    } else {
-      toast.dismiss();
-      toast.error("Error occurred. Please try again.");
-      const newBotMessage: Message = {
-        id: messages.length + 2,
-        text: "Error: " + data.message,
-        sender: "bot",
-      };
-      setMessages((prevMessages) => [...prevMessages, newBotMessage]);
+      if (response.ok) {
+        const newBotMessage: Message = {
+          id: messages.length + 2,
+          text: data,
+          sender: "bot",
+        };
+        setMessages((prevMessages) => [...prevMessages, newBotMessage]);
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Function to handle the file upload
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    toast.loading("Uploading PDF file...");
-    setFile(e.target.files?.[0] || null);
-
-    // Adding the below one to handle the delay in setFile
     const file = e.target.files?.[0];
-
     if (file && file.type === "application/pdf") {
-      // upload the file to the server
-
+      setFile(file);
       const formData = new FormData();
-
       formData.append("file", file);
 
-      const response = await fetch("http://localhost:8000/upload", {
-        method: "POST",
-        body: formData,
-      });
+      try {
+        const response = await fetch("http://localhost:8000/upload", {
+          method: "POST",
+          body: formData,
+        });
 
-      if (!response.ok) {
-        toast.dismiss();
-        toast.error("Error occurred while uploading the file.");
-        return;
+        if (!response.ok) throw new Error("Upload failed");
+
+        const newBotMessage: Message = {
+          id: messages.length + 1,
+          text: `PDF "${file.name}" has been uploaded successfully!`,
+          sender: "bot",
+        };
+        setMessages((prevMessages) => [...prevMessages, newBotMessage]);
+
+        alert("PDF file uploaded successfully!");
+      } catch (error) {
+        alert("Failed to upload PDF. Please try again.");
       }
-
-      // Here you would typically send the file to your server or process it
-      // For this example, we'll just add a message about the upload
-      toast.dismiss();
-      toast.success("PDF file uploaded successfully!");
-      const newBotMessage: Message = {
-        id: messages.length + 1,
-        text: `PDF "${file.name}" has been uploaded successfully!`,
-        sender: "bot",
-      };
-      setMessages((prevMessages) => [...prevMessages, newBotMessage]);
     } else {
-      toast.dismiss();
-      toast.error("Please upload a valid PDF file.");
+      alert("Please upload a valid PDF file.");
     }
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
-      <Toaster />
-      <nav className="flex justify-between items-center p-4 bg-white shadow-md">
-        <div className="flex items-center space-x-14">
-          <a href="/">
+    <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
+      <nav className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 shadow-md">
+        <div className="flex items-center space-x-4">
+          <a href="/" className="flex-shrink-0">
             <img
               src="/logo.png"
               alt="logo"
               width={104}
               height={41}
-              className="cursor-pointer"
+              className="w-24 h-auto"
             />
           </a>
-          <div className="group font-semibold relative pb-1">
-            <a href="/chat">Chat</a>
-            <span className="h-1 w-full bg-[#0FA958] absolute top-6 left-0"></span>
-          </div>
-          <div className="group font-semibold relative pb-1">
-            <a href="/upload">Upload</a>
-            <span className="h-1 w-0 bg-[#0FA958] group-hover:w-full transition-all ease-in-out duration-300 absolute top-6 left-0"></span>
-          </div>
-          <div className="group font-semibold relative pb-1">
-            <a href="/about">About</a>
-            <span className="h-1 w-0 bg-[#0FA958] group-hover:w-full transition-all ease-in-out duration-300 absolute top-6 left-0"></span>
+          <div className="hidden md:flex space-x-4">
+            {["Chat", "Upload", "About"].map((item) => (
+              <button
+                key={item}
+                className="relative group px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              >
+                {item}
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
+              </button>
+            ))}
           </div>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center space-x-2">
           {file && (
-            <div className="flex items-center gap-2">
-              <div className="border-2 border-[#0FA95870] p-2 rounded-md">
-                <File color="#0FA958" />
-              </div>
-              <p className="text-[#0FA958] font-semibold">{file?.name}</p>
+            <div className="hidden md:flex items-center space-x-2 bg-blue-100 dark:bg-blue-900 px-3 py-1 rounded-full">
+              <File className="w-4 h-4 text-blue-500" />
+              <span className="text-sm font-medium text-blue-500 truncate max-w-[100px]">
+                {file.name}
+              </span>
             </div>
           )}
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="p-2 flex gap-2 border-2 border-black rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="relative p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-700 rounded-full transition-colors"
+            title="Upload PDF"
           >
-            <CirclePlus />
-            <span className="font-semibold max-sm:hidden">Upload PDF</span>
+            <Upload className="h-5 w-5" />
+            <span className="sr-only">Upload PDF</span>
+            {file && (
+              <span className="absolute top-0 right-0 w-2 h-2 bg-blue-500 rounded-full" />
+            )}
+          </button>
+          <button className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-700 rounded-full transition-colors">
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Menu</span>
           </button>
         </div>
         <input
@@ -171,54 +154,60 @@ export default function Component() {
           className="hidden"
         />
       </nav>
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 overflow-x-hidden">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
-          <motion.div
-            initial={
-              message.sender === "bot"
-                ? { opacity: 0, scale: 0.9, x: "-25%" }
-                : { opacity: 0, scale: 0.9, x: "25%" }
-            }
-            animate={
-              message.sender === "bot"
-                ? { opacity: 1, scale: 1, x: "0%" }
-                : { opacity: 1, scale: 1, x: "0%" }
-            }
-            transition={{ duration: 0.5 }}
-            whileHover={{ scale: 1.05 }}
-            WhileTap={{ scale: 0.95 }}
+          <div
             key={message.id}
-            className={` w-fit max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl p-3 rounded-lg ${
-              message.sender === "user"
-                ? "bg-blue-500 text-white ml-auto"
-                : "bg-white text-gray-800"
-            }`}
+            className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
           >
-            {message.text}
-          </motion.div>
+            <div
+              className={`flex items-start space-x-2 max-w-[80%] p-3 rounded-lg ${
+                message.sender === "user"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              }`}
+            >
+              <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
+                {message.sender === "bot" ? (
+                  <Bot className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                ) : (
+                  <User className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                )}
+              </div>
+              <p className="text-sm">{message.text}</p>
+            </div>
+          </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={handleSendMessage} className="p-4 bg-white border-t">
+      <form
+        onSubmit={handleSendMessage}
+        className="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700"
+      >
         <div className="flex space-x-2">
           <button
-            type="submit"
-            className="p-2 bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-full"
+            type="button"
+            className="p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-700 rounded-full transition-colors"
+            title="Add attachment"
           >
-            <Plus />
+            <Plus className="h-5 w-5" />
+            <span className="sr-only">Add attachment</span>
           </button>
           <input
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 p-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            disabled={isLoading}
+            className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Send message"
           >
-            <SendHorizontal />
+            <Send className="h-5 w-5" />
+            <span className="sr-only">Send message</span>
           </button>
         </div>
       </form>
