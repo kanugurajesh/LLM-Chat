@@ -13,7 +13,7 @@ const Upload = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("http://localhost:8000/files/local", {
+        const response = await fetch("http://localhost:8000/files", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -35,6 +35,25 @@ const Upload = () => {
     };
     fetchData();
   }, []);
+
+  const deleteFile = async (id: string) => {
+    try {
+      const response = await fetch(`http://localhost:8000/files/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setFiles(files.filter((file) => file[0] !== id));
+      } else {
+        throw new Error("Failed to delete file");
+      }
+    } catch (err) {
+      setError("Failed to delete file. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -85,6 +104,13 @@ const Upload = () => {
                         className="text-sm font-medium text-gray-900 dark:text-white hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
                         {file[2]}
+                      </button>
+                      <button
+                        onClick={() => deleteFile(file[0])}
+                        className="ml-4 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" aria-hidden="true" />
+                        Delete
                       </button>
                     </div>
                     <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">

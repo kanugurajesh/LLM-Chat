@@ -4,8 +4,9 @@ import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import About from "./routes/About.tsx";
 import NotFound from "./routes/NotFound.tsx";
-import Upload from "./routes/Upload.tsx";
+import Upload from "./routes/Synced.tsx";
 import Chat from "./routes/Chat.tsx";
+import Synced from "./routes/Synced.tsx";
 
 const router = createBrowserRouter([
   {
@@ -17,8 +18,8 @@ const router = createBrowserRouter([
     element: <About />,
   },
   {
-    path: "/upload",
-    element: <Upload />,
+    path: "/synced",
+    element: <Synced />,
   },
   {
     path: "/chat",
@@ -31,5 +32,5 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />,
+  <RouterProvider router={router} />
 );

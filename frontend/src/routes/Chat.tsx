@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useRef, useEffect } from "react";
 import { File, Upload, Send, Plus, Menu, User, Bot } from "lucide-react";
 import { Link } from "react-router-dom";
