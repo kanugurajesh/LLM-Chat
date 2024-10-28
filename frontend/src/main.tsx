@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import About from "./routes/About.tsx";
 import NotFound from "./routes/NotFound.tsx";
-import Upload from "./routes/Synced.tsx";
+import Upload from "./routes/Upload.tsx";
 import Chat from "./routes/Chat.tsx";
 import Synced from "./routes/Synced.tsx";
 
@@ -24,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/chat",
     element: <Chat />,
+  },
+  {
+    path: "/upload",
+    element: <Upload />,
   },
   {
     path: "*",

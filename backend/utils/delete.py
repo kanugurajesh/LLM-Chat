@@ -9,11 +9,9 @@ conn = psycopg2.connect(database_url)
 
 def delete():
     with conn.cursor() as curr:
-        # curr.execute("SELECT * FROM files")
-        curr.execute("DELETE FROM files WHERE file_id = 2")
-        # print(curr.fetchall())
+        # Corrected SQL syntax
+        curr.execute("DELETE FROM files")
         conn.commit()
     conn.close()
-
 
 delete()

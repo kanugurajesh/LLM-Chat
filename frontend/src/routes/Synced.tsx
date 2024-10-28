@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Trash2, Upload as UploadIcon, AlertCircle } from "lucide-react";
 import Navbar from "../components/Navbar";
+import toast from "react-hot-toast";
 
 type FileData = [string, string, string]; // [id, path, filename]
 
@@ -37,6 +38,7 @@ const Upload = () => {
   }, []);
 
   const deleteFile = async (id: string) => {
+    toast.loading("Deleting file...");
     try {
       const response = await fetch(`http://localhost:8000/files/${id}`, {
         method: "DELETE",
@@ -45,12 +47,16 @@ const Upload = () => {
         },
       });
 
+      toast.dismiss();
       if (response.ok) {
+        toast.success("File deleted successfully");
         setFiles(files.filter((file) => file[0] !== id));
       } else {
+        toast.error("Failed to delete file");
         throw new Error("Failed to delete file");
       }
     } catch (err) {
+      toast.error("Failed to delete file");
       setError("Failed to delete file. Please try again.");
     }
   };

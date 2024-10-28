@@ -31,7 +31,7 @@ const Navbar = () => {
           ></span>
         </div>
         <div className="group font-semibold relative pb-1">
-          <a href="/upload">Synced</a>
+          <a href="/Synced">Synced</a>
           <span
             className={
               location.pathname === "/synced"

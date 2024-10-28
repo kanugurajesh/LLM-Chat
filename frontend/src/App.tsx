@@ -215,7 +215,7 @@ export default function HomePage() {
         </div>
         <div className="container mx-auto px-4 mt-8 pt-8 border-t border-gray-700 text-center">
           <p className="text-gray-400">
-            &copy; 2023 AI Planet. All rights reserved.
+            &copy; 2024 AI Planet. All rights reserved.
           </p>
         </div>
       </footer>
