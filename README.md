@@ -78,3 +78,12 @@ DATABASE_URL=
 ![Screenshot 2024-10-28 185820](https://github.com/user-attachments/assets/103a12dd-a949-4968-a8a3-0db1a5b271ff)
 
 ![Screenshot 2024-10-28 185828](https://github.com/user-attachments/assets/7031c90d-3c05-4722-9ca3-d828c0067048)
+
+![Screenshot 2024-10-28 191607](https://github.com/user-attachments/assets/0ce5db5c-a21f-4780-a400-eb7edf0d8e2f)
+
+![Screenshot 2024-10-28 191618](https://github.com/user-attachments/assets/1c078d9f-a87b-477e-
+b169-9a6bd91921c9)
+
+![Screenshot 2024-10-28 191632](https://github.com/user-attachments/assets/f6f420c2-6533-47e6-8230-30674a8332be)
+
+![Screenshot 2024-10-28 191618](https://github.com/user-attachments/assets/f14260f2-37ae-472c-83e1-633fd6333805)
