@@ -42,7 +42,9 @@ To run this application, you need to set the following environment variables:
 
 ```bash
 COHERE_API_KEY=
+# get the cohere api key from cohere website
 DATABASE_URL=
+# get the neondb postgres url
 ```
 
 4. Install the packages
@@ -87,3 +89,15 @@ b169-9a6bd91921c9)
 ![Screenshot 2024-10-28 191632](https://github.com/user-attachments/assets/f6f420c2-6533-47e6-8230-30674a8332be)
 
 ![Screenshot 2024-10-28 191618](https://github.com/user-attachments/assets/f14260f2-37ae-472c-83e1-633fd6333805)
+
+## ▶️ Demo
+
+[![SnapText](https://img.youtube.com/vi/AaYpth-z9DM/0.jpg)](https://www.youtube.com/watch?v=AaYpth-z9DM)
+
+
+## 🌐 Socials:
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://rajeshportfolio.me/)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rajesh-kanugu-aba8a3254/)
+[![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/exploringengin1)
+[![youtube](https://img.shields.io/badge/YouTube-red?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com/@RajeshKanugu)
+![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCK8JZ6oQY32SQO3ohLWkuxw)
