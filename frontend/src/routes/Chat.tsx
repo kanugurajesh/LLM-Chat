@@ -69,6 +69,27 @@ export default function Component() {
     }
   };
 
+  const handleClearMemory = async () => {
+    toast.dismiss();
+    toast.loading("Clearing memory...");
+    const response = await fetch("http://localhost:8000/clear", {
+      method: "GET",
+    });
+
+    toast.dismiss();
+    if (response.ok) {
+      const newBotMessage: Message = {
+        id: messages.length + 1,
+        text: "Memory has been cleared successfully!",
+        sender: "bot",
+      };
+      setMessages((prevMessages) => [...prevMessages, newBotMessage]);
+      toast.success("Memory cleared successfully!");
+    } else {
+      toast.error("Failed to clear memory. Please try again.");
+    }
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type === "application/pdf") {
@@ -199,6 +220,7 @@ export default function Component() {
         <div className="flex space-x-2">
           <button
             type="button"
+            onClick={handleClearMemory}
             className="p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-700 rounded-full transition-colors"
             title="Add attachment"
           >
