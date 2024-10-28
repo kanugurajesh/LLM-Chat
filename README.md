@@ -19,3 +19,41 @@ A RAG application to chat with your documents with complete control over your da
    Built with **TailwindCSS** for responsiveness and **Framer Motion** for smooth transitions. Unauthorized pages are highlighted with engaging **Rive animations** for user feedback.
   
 ---
+
+## 🚀 Quick Start
+
+### 📦 Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/LLM-Chat.git
+   ```
+2. Change the directory
+   ```bash
+   cd LLM-Chat
+   ```
+3. Add the environment variables in the .env.local
+  ```bash
+  cd backend && create .env file
+  ```
+4. Install the packages
+   ```bash
+   pip install -r requirements.txt
+   ```
+5. Run the project
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+6. Change the directory
+   ```bash
+   cd frontend
+   ```
+7. Install the packages
+   ```bash
+   npm install
+   ```
+9. Run the project
+   ```bash
+   npm run dev
+   ```
