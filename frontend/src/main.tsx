@@ -7,6 +7,9 @@ import NotFound from "./routes/NotFound.tsx";
 import Upload from "./routes/Upload.tsx";
 import Chat from "./routes/Chat.tsx";
 import Synced from "./routes/Synced.tsx";
+import Features from "./routes/Feature.tsx";
+import Pricing from "./routes/Pricing.tsx";
+import Contact from "./routes/Contact.tsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +31,18 @@ const router = createBrowserRouter([
   {
     path: "/upload",
     element: <Upload />,
+  },
+  {
+    path: "/features",
+    element: <Features />,
+  },
+  {
+    path: "/pricing",
+    element: <Pricing />,
+  },
+  {
+    path: "/contact",
+    element: <Contact />,
   },
   {
     path: "*",
