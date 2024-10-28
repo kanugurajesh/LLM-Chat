@@ -21,10 +21,10 @@ export default function HomePage() {
             <h1 className="text-2xl font-bold">AI Planet</h1>
             <nav className="hidden md:block">
               <ul className="flex space-x-6">
-                <NavItem href="#" text="Home" />
-                <NavItem href="#" text="Features" />
-                <NavItem href="#" text="Pricing" />
-                <NavItem href="#" text="Contact" />
+                <NavItem href="/" text="Home" />
+                <NavItem href="/features" text="Features" />
+                <NavItem href="/pricing" text="Pricing" />
+                <NavItem href="/contact" text="Contact" />
               </ul>
             </nav>
             <button
