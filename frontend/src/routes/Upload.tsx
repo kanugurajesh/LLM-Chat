@@ -11,7 +11,7 @@ export default function Upload() {
   const [file, setFile] = useState<File | null>(null);
   const [toast, setToast] = useState<{
     message: string;
-    type: "success" | "error";
+    type: "success" | "error" | "loading";
   } | null>(null);
 
   useEffect(() => {
@@ -91,6 +91,10 @@ export default function Upload() {
       });
       return;
     }
+
+    // Add a loading toast
+
+    setToast({ message: "Uploading file...", type: "loading" });
 
     const formData = new FormData();
     formData.append("file", file);
