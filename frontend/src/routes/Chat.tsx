@@ -72,7 +72,7 @@ export default function Component() {
   const handleClearMemory = async () => {
     toast.dismiss();
     toast.loading("Clearing memory...");
-    const response = await fetch("http://localhost:8000/clear", {
+    const response = await fetch("http://localhost:8000/chat/clear", {
       method: "GET",
     });
 

@@ -20,17 +20,16 @@ router = APIRouter()
 # Define the number of similar results to retrieve
 top_n = 5
 
-# Initialiazing the cohere model
+# Initialize the Cohere model
 model = ChatCohere(temperature=0)
 
-# Creating a prompt template for the model
+# Create a prompt template for the model
 prompt = PromptTemplate.from_template(
     "As a knowledgeable assistant, provide a clear and helpful answer to the user's question."
     "Question: {question}"
     "Context : {context}"
     "Respond concisely and directly:"
 )
-
 
 def call_model(state: MessagesState):
     system_prompt = (
@@ -41,14 +40,17 @@ def call_model(state: MessagesState):
     response = model.invoke(messages)
     return {"messages": response}
 
-
 workflow.add_node("model", call_model)
 workflow.add_edge(START, "model")
 
-# Add simple in-memory checkpointer
-memory = MemorySaver()
-app = workflow.compile(checkpointer=memory)
+# Function to reset memory and app
+def initialize_app():
+    global memory, app
+    memory = MemorySaver()
+    app = workflow.compile(checkpointer=memory)
 
+# Initial setup
+initialize_app()
 
 @router.post("")
 async def read_items(request: Request):
@@ -117,5 +119,5 @@ async def read_items(request: Request):
 # The below function clears the memory
 @router.get("/clear")
 async def clear():
-    memory.clear()
+    initialize_app()  # Reinitialize memory and app
     return "Memory cleared"
