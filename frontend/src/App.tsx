@@ -42,10 +42,10 @@ export default function HomePage() {
         {isMenuOpen && (
           <nav className="md:hidden bg-purple-700 py-4">
             <ul className="flex flex-col items-center space-y-4">
-              <NavItem href="#" text="Home" />
-              <NavItem href="#" text="Features" />
-              <NavItem href="#" text="Pricing" />
-              <NavItem href="#" text="Contact" />
+              <NavItem href="/" text="Home" />
+              <NavItem href="/features" text="Features" />
+              <NavItem href="/pricing" text="Pricing" />
+              <NavItem href="/contact" text="Contact" />
             </ul>
           </nav>
         )}
@@ -128,7 +128,7 @@ export default function HomePage() {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="#"
+                  href="/"
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
                   Home
@@ -136,7 +136,7 @@ export default function HomePage() {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/features"
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
                   Features
@@ -144,7 +144,7 @@ export default function HomePage() {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/pricing"
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
                   Pricing
@@ -152,7 +152,7 @@ export default function HomePage() {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/contact"
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
                   Contact
