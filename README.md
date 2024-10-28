@@ -36,6 +36,15 @@ A RAG application to chat with your documents with complete control over your da
   ```bash
   cd backend && create .env file
   ```
+
+# Environment Variables
+To run this application, you need to set the following environment variables:
+
+```bash
+COHERE_API_KEY=
+DATABASE_URL=
+```
+
 4. Install the packages
    ```bash
    pip install -r requirements.txt
