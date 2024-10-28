@@ -113,3 +113,9 @@ async def read_items(request: Request):
     )
 
     return final.get("messages")[len(final.get("messages")) - 1].content
+
+# The below function clears the memory
+@router.get("/clear")
+async def clear():
+    memory.clear()
+    return "Memory cleared"
