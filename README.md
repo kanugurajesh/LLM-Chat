@@ -66,3 +66,15 @@ DATABASE_URL=
    ```bash
    npm run dev
    ```
+
+## Images
+
+![Screenshot 2024-10-28 185749](https://github.com/user-attachments/assets/9c5cc3c8-786b-4f13-9601-4c35283cc89e)
+
+![Screenshot 2024-10-28 185754](https://github.com/user-attachments/assets/a4872ec4-cb56-45da-bde7-162b5a9cec22)
+
+![Screenshot 2024-10-28 185814](https://github.com/user-attachments/assets/ca17beb6-9d6d-4219-90da-07504eb11b0f)
+
+![Screenshot 2024-10-28 185820](https://github.com/user-attachments/assets/103a12dd-a949-4968-a8a3-0db1a5b271ff)
+
+![Screenshot 2024-10-28 185828](https://github.com/user-attachments/assets/7031c90d-3c05-4722-9ca3-d828c0067048)
